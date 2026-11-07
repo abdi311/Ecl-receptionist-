@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ECL Solutions – Rendez-vous</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --text:#16181d; --muted:#5b6170; --line:#dfe2e8; --accent:#c8102e; --accent-ink:#fff; --ok:#1d7a3a; --err:#b42318; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#111317; --card:#1a1d23; --text:#eceef2; --muted:#a2a8b5; --line:#2c3039; --accent:#ff4d5e; --accent-ink:#111; --ok:#5fd38a; --err:#ff8a80; } }
+  * { box-sizing: border-box; }
+  body { margin:0; font:16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; background:var(--bg); color:var(--text); }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 48px; }
+  header { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+  h1 { font-size: 1.5rem; margin: 0; }
+  .brand { color: var(--accent); }
+  .langs button { border:1px solid var(--line); background:var(--card); color:var(--text); border-radius:6px; padding:4px 10px; cursor:pointer; }
+  .langs button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); font-weight:600; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px; margin-top:20px; }
+  .muted { color: var(--muted); font-size: .9rem; }
+  .day { margin: 14px 0 6px; font-weight: 600; text-transform: capitalize; }
+  .slots { display:flex; flex-wrap:wrap; gap:8px; }
+  .slot { border:1px solid var(--line); background:transparent; color:var(--text); border-radius:8px; padding:8px 12px; cursor:pointer; font-variant-numeric: tabular-nums; }
+  .slot[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .days { max-height: 360px; overflow:auto; }
+  label { display:block; margin-top:12px; font-weight:500; }
+  input, textarea { width:100%; margin-top:4px; padding:10px; border:1px solid var(--line); border-radius:8px; background:transparent; color:var(--text); font: inherit; }
+  .submit { margin-top:16px; width:100%; padding:12px; border:0; border-radius:8px; background:var(--accent); color:var(--accent-ink); font-weight:600; font-size:1rem; cursor:pointer; }
+  .submit:disabled { opacity:.5; cursor:not-allowed; }
+  .msg { margin-top:12px; font-weight:500; }
+  .msg.ok { color: var(--ok); } .msg.err { color: var(--err); }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1><span class="brand">ECL</span> Solutions</h1>
+    <div class="langs" role="group" aria-label="Language">
+      <button data-lang="fr">FR</button><button data-lang="it">IT</button><button data-lang="de">DE</button><button data-lang="en">EN</button>
+    </div>
+  </header>
+
+  <section class="card">
+    <h2 id="t-title" style="margin-top:0"></h2>
+    <p class="muted" id="t-tz"></p>
+    <div class="days" id="days"></div>
+  </section>
+
+  <form class="card" id="form" autocomplete="on">
+    <p class="muted" id="chosen"></p>
+    <label><span id="t-name"></span><input name="name" required maxlength="80" autocomplete="name"></label>
+    <label><span id="t-vehicle"></span><input name="vehicle" required maxlength="80"></label>
+    <label><span id="t-reason"></span><textarea name="reason" required maxlength="200" rows="3"></textarea></label>
+    <button class="submit" id="submit" type="submit" disabled></button>
+    <p class="msg" id="msg" role="status"></p>
+  </form>
+</main>
+<script>
+const TZ = 'Europe/Zurich';
+const LOCALES = { fr:'fr-CH', it:'it-CH', de:'de-CH', en:'en-GB' };
+const T = {
+  fr: { title:'Choisissez un créneau', tz:'Heures de Zurich (Europe/Zurich).', name:'Nom', vehicle:'Véhicule (marque et modèle)', reason:'Motif de la visite', submit:'Confirmer le rendez-vous', pick:'Choisissez d’abord un créneau.', chosen:'Créneau choisi :', ok:'Rendez-vous enregistré. Votre référence : ', taken:'Désolé, ce créneau vient d’être pris. Choisissez-en un autre.', err:'Erreur, veuillez réessayer.', none:'Aucun créneau libre pour le moment.', doc:'ECL Solutions – Rendez-vous' },
+  it: { title:'Scelga un orario', tz:'Orari di Zurigo (Europe/Zurich).', name:'Nome', vehicle:'Veicolo (marca e modello)', reason:'Motivo della visita', submit:'Conferma appuntamento', pick:'Scelga prima un orario.', chosen:'Orario scelto:', ok:'Appuntamento registrato. Riferimento: ', taken:'Spiacenti, questo orario è appena stato preso. Ne scelga un altro.', err:'Errore, riprovi.', none:'Nessun orario libero al momento.', doc:'ECL Solutions – Appuntamento' },
+  de: { title:'Wählen Sie einen Termin', tz:'Zeiten in Zürcher Zeit (Europe/Zurich).', name:'Name', vehicle:'Fahrzeug (Marke und Modell)', reason:'Grund des Besuchs', submit:'Termin bestätigen', pick:'Bitte zuerst einen Termin wählen.', chosen:'Gewählter Termin:', ok:'Termin gespeichert. Ihre Referenz: ', taken:'Dieser Termin wurde gerade vergeben. Bitte wählen Sie einen anderen.', err:'Fehler, bitte erneut versuchen.', none:'Zurzeit keine freien Termine.', doc:'ECL Solutions – Termin' },
+  en: { title:'Choose a time', tz:'Times shown in Zurich time (Europe/Zurich).', name:'Name', vehicle:'Vehicle (make and model)', reason:'Reason for the visit', submit:'Confirm appointment', pick:'Please pick a time first.', chosen:'Selected time:', ok:'Appointment saved. Your reference: ', taken:'Sorry, that time was just taken. Please choose another.', err:'Something went wrong, please try again.', none:'No free times at the moment.', doc:'ECL Solutions – Appointment' },
+};
+const $ = (id) => document.getElementById(id);
+let lang = new URLSearchParams(location.search).get('lang');
+if (!T[lang]) lang = (navigator.languages || [navigator.language]).map(l => l.slice(0,2)).find(l => T[l]) || 'fr';
+let slots = [], selected = null;
+
+const fmtDay = () => new Intl.DateTimeFormat(LOCALES[lang], { timeZone: TZ, weekday:'long', day:'numeric', month:'long' });
+const fmtTime = () => new Intl.DateTimeFormat(LOCALES[lang], { timeZone: TZ, hour:'2-digit', minute:'2-digit' });
+
+function applyLang() {
+  const t = T[lang];
+  document.documentElement.lang = lang; document.title = t.doc;
+  for (const k of ['title','tz','name','vehicle','reason']) $('t-' + k).textContent = t[k];
+  $('submit').textContent = t.submit;
+  document.querySelectorAll('.langs button').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === lang));
+  render();
+}
+
+function render() {
+  const t = T[lang], box = $('days');
+  box.innerHTML = '';
+  if (!slots.length) { box.textContent = t.none; }
+  const byDay = new Map();
+  for (const s of slots) { if (!byDay.has(s.date)) byDay.set(s.date, []); byDay.get(s.date).push(s); }
+  for (const [, list] of byDay) {
+    const d = document.createElement('div'); d.className = 'day'; d.textContent = fmtDay().format(new Date(list[0].start)); box.append(d);
+    const row = document.createElement('div'); row.className = 'slots';
+    for (const s of list) {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'slot';
+      b.textContent = fmtTime().format(new Date(s.start));
+      b.setAttribute('aria-pressed', selected === s.start);
+      b.onclick = () => { selected = s.start; render(); };
+      row.append(b);
+    }
+    box.append(row);
+  }
+  if (selected && !slots.some(s => s.start === selected)) selected = null;
+  $('submit').disabled = !selected;
+  $('chosen').textContent = selected ? `${t.chosen} ${fmtDay().format(new Date(selected))}, ${fmtTime().format(new Date(selected))}` : t.pick;
+}
+
+async function load() {
+  const r = await fetch('/api/slots'); slots = (await r.json()).slots; render();
+}
+
+$('form').onsubmit = async (e) => {
+  e.preventDefault();
+  const t = T[lang], f = new FormData(e.target), msg = $('msg');
+  $('submit').disabled = true; msg.className = 'msg'; msg.textContent = '';
+  try {
+    const r = await fetch('/api/bookings', { method:'POST', headers:{'content-type':'application/json'},
+      body: JSON.stringify({ start: selected, name: f.get('name'), vehicle: f.get('vehicle'), reason: f.get('reason'), lang }) });
+    const data = await r.json();
+    if (r.status === 201) { msg.className = 'msg ok'; msg.textContent = t.ok + data.booking.id; selected = null; e.target.reset(); }
+    else if (r.status === 409) { msg.className = 'msg err'; msg.textContent = t.taken; selected = null; }
+    else { msg.className = 'msg err'; msg.textContent = t.err; }
+  } catch { msg.className = 'msg err'; msg.textContent = t.err; }
+  await load();
+};
+document.querySelectorAll('.langs button').forEach(b => b.onclick = () => { lang = b.dataset.lang; applyLang(); });
+applyLang(); load();
+</script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+data/calendar.json
+data/*.lock
+data/*.tmp
+node_modules/

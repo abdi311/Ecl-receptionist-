@@ -1,0 +1,17 @@
+{
+  "name": "ecl-receptionist",
+  "version": "0.1.0",
+  "description": "Prototipo del receptionist multilingue di ECL Solutions (telefono simulato via testo, pagina di prenotazione, link WhatsApp, calendario finto Europe/Zurich).",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "chat": "node scripts/chat.js",
+    "demo": "node scripts/demo.js",
+    "seed": "node scripts/seed.js",
+    "test": "node --test \"test/*.test.js\""
+  }
+}

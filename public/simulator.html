@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulatore chiamata</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --text:#16181d; --muted:#5b6170; --line:#dfe2e8; --accent:#c8102e; --accent-ink:#fff; --me:#e8eefc; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#111317; --card:#1a1d23; --text:#eceef2; --muted:#a2a8b5; --line:#2c3039; --accent:#ff4d5e; --accent-ink:#111; --me:#243049; } }
+  * { box-sizing:border-box; }
+  body { margin:0; font:16px/1.5 system-ui, sans-serif; background:var(--bg); color:var(--text); }
+  main { max-width:720px; margin:0 auto; padding:20px 16px; display:flex; flex-direction:column; height:100vh; height:100dvh; }
+  h1 { font-size:1.2rem; margin:0 0 4px; }
+  .muted { color:var(--muted); font-size:.85rem; margin:0 0 8px; }
+  #log { flex:1; overflow:auto; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px; }
+  .row { margin:8px 0; display:flex; }
+  .row.me { justify-content:flex-end; }
+  .bubble { max-width:85%; padding:8px 12px; border-radius:10px; border:1px solid var(--line); white-space:pre-wrap; }
+  .me .bubble { background:var(--me); }
+  .tag { font-size:.75rem; color:var(--muted); display:block; }
+  form { display:flex; gap:8px; margin-top:10px; }
+  input[type=text] { flex:1; padding:10px; border:1px solid var(--line); border-radius:8px; background:var(--card); color:var(--text); font:inherit; min-width:0; }
+  button { padding:10px 14px; border:0; border-radius:8px; background:var(--accent); color:var(--accent-ink); font-weight:600; cursor:pointer; }
+  .opts { display:flex; gap:14px; flex-wrap:wrap; margin-top:8px; font-size:.9rem; }
+  #state { font-size:.75rem; color:var(--muted); margin-top:6px; white-space:pre-wrap; overflow-wrap:anywhere; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Simulatore telefonata – ECL Solutions</h1>
+  <p class="muted">Scrivi come se parlassi al telefono (fr / it / de / en). Se invii mentre il receptionist sta ancora “parlando”, è un’interruzione (barge-in). Nessun numero reale collegato.</p>
+  <div id="log" aria-live="polite"></div>
+  <form id="f"><input id="in" type="text" autocomplete="off" placeholder="…" autofocus><button>Invia</button><button type="button" id="mic" hidden>🎤</button></form>
+  <div class="opts">
+    <label><input type="checkbox" id="voice"> Voce del browser (sintesi locale)</label>
+    <button type="button" id="restart" style="padding:4px 10px">Nuova chiamata</button>
+    <a href="/book" target="_blank">Pagina prenotazione ↗</a>
+  </div>
+  <div id="state"></div>
+</main>
+<script>
+const VOICES = { fr:'fr-CH', it:'it-CH', de:'de-CH', en:'en-GB' };
+const $ = (id) => document.getElementById(id);
+let session = null, speaking = null, bargedIn = false;
+
+function bubble(who, text, tag) {
+  const row = document.createElement('div'); row.className = 'row ' + who;
+  const b = document.createElement('div'); b.className = 'bubble';
+  if (tag) { const s = document.createElement('span'); s.className = 'tag'; s.textContent = tag; b.append(s); }
+  const t = document.createElement('span'); t.textContent = text; b.append(t);
+  row.append(b); $('log').append(row); $('log').scrollTop = 1e9; return t;
+}
+
+function speak(reply) {
+  const words = reply.text.split(' ');
+  const el = bubble('bot', '', 'Receptionist' + (reply.lang ? ' · ' + reply.lang : ''));
+  if ($('voice').checked && 'speechSynthesis' in window) {
+    const u = new SpeechSynthesisUtterance(reply.text); u.lang = VOICES[reply.lang] || 'fr-CH';
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  }
+  let i = 0;
+  speaking = { el, words, timer: setInterval(() => {
+    el.textContent += (i ? ' ' : '') + words[i++]; $('log').scrollTop = 1e9;
+    if (i >= words.length) { clearInterval(speaking.timer); speaking = null; }
+  }, 110) };
+}
+
+function stopSpeaking() {
+  if (!speaking) return false;
+  clearInterval(speaking.timer);
+  speaking.el.textContent += ' — [interrotto]';
+  speaking = null; bargedIn = true;
+  if ('speechSynthesis' in window) speechSynthesis.cancel();
+  return true;
+}
+
+async function start() {
+  stopSpeaking(); bargedIn = false; $('log').innerHTML = '';
+  const r = await fetch('/api/phone/sessions', { method:'POST' }); const d = await r.json();
+  session = d.id; speak(d.reply); $('state').textContent = '';
+}
+
+async function sendText(text) {
+  if (!text.trim() || !session) return;
+  const interrupted = stopSpeaking() || bargedIn; bargedIn = false;
+  bubble('me', text, interrupted ? 'Cliente (interrompe)' : 'Cliente');
+  const r = await fetch(`/api/phone/sessions/${session}/messages`, { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({ text, interrupted }) });
+  const d = await r.json();
+  speak(d.reply);
+  $('state').textContent = 'stato: ' + JSON.stringify(d.state);
+}
+
+$('f').onsubmit = (e) => { e.preventDefault(); const v = $('in').value; $('in').value = ''; sendText(v); };
+$('restart').onclick = start;
+
+// Microfono opzionale (Web Speech API del browser, se disponibile).
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (SR) {
+  $('mic').hidden = false;
+  $('mic').onclick = () => {
+    const rec = new SR(); rec.lang = 'fr-CH'; rec.interimResults = true;
+    rec.onresult = (ev) => { stopSpeaking(); const res = ev.results[ev.results.length - 1]; if (res.isFinal) sendText(res[0].transcript); };
+    rec.start();
+  };
+}
+start();
+</script>
+</body>
+</html>
