@@ -62,8 +62,24 @@ npm start         # http://localhost:3000
 
 - `http://localhost:3000/book`: pagina di prenotazione (lingua da `?lang=fr|it|de|en` o dal browser).
 - `http://localhost:3000/simulator`: la stessa telefonata in chat; se invii mentre il receptionist
-  "parla" è un'interruzione. Opzione "voce del browser" per sentirlo (sintesi vocale locale del browser,
+  "parla" è un'interruzione. Opzione "Voce del receptionist" per sentirlo (sintesi vocale del browser,
   gratuita).
+
+### Prova a voce (gratis, nel browser)
+
+1. `npm start`, poi apri **http://localhost:3000/simulator** in **Chrome o Edge** sullo stesso computer
+   (il microfono funziona solo su `localhost` o `https`; Firefox non ha il riconoscimento vocale).
+2. Premi **🎤** e consenti il microfono. Si attiva anche la voce del receptionist. Meglio usare le cuffie.
+3. Parla come al telefono. Il microfono resta acceso per tutta la chiamata:
+   - ascolta nella **lingua della chiamata** e cambia da solo quando il receptionist cambia lingua
+     (all'inizio usa la lingua del browser);
+   - se parli mentre il receptionist sta parlando, **lui si zittisce** (interruzione) e ti ascolta;
+     la sua stessa voce captata dal microfono viene ignorata.
+4. Se vuoi iniziare in un'altra lingua rispetto a quella del browser, scegli la lingua nel menu
+   "Lingua microfono".
+
+Nota: il riconoscimento vocale di Chrome/Edge passa dai server di Google/Microsoft (gratuito, nessuna
+chiave da configurare). Per una telefonata vera servirà un provider di telefonia e voce: vedi sotto.
 - WhatsApp finto (calcola la risposta ma non invia niente):
 
   ```bash

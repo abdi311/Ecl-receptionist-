@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Simulatore chiamata</title>
 <style>
-  :root { --bg:#f6f7f9; --card:#fff; --text:#16181d; --muted:#5b6170; --line:#dfe2e8; --accent:#c8102e; --accent-ink:#fff; --me:#e8eefc; }
-  @media (prefers-color-scheme: dark) { :root { --bg:#111317; --card:#1a1d23; --text:#eceef2; --muted:#a2a8b5; --line:#2c3039; --accent:#ff4d5e; --accent-ink:#111; --me:#243049; } }
+  :root { --bg:#f6f7f9; --card:#fff; --text:#16181d; --muted:#5b6170; --line:#dfe2e8; --accent:#c8102e; --accent-ink:#fff; --me:#e8eefc; --live:#1d7a3a; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#111317; --card:#1a1d23; --text:#eceef2; --muted:#a2a8b5; --line:#2c3039; --accent:#ff4d5e; --accent-ink:#111; --me:#243049; --live:#5fd38a; } }
   * { box-sizing:border-box; }
   body { margin:0; font:16px/1.5 system-ui, sans-serif; background:var(--bg); color:var(--text); }
   main { max-width:720px; margin:0 auto; padding:20px 16px; display:flex; flex-direction:column; height:100vh; height:100dvh; }
@@ -21,28 +21,49 @@
   form { display:flex; gap:8px; margin-top:10px; }
   input[type=text] { flex:1; padding:10px; border:1px solid var(--line); border-radius:8px; background:var(--card); color:var(--text); font:inherit; min-width:0; }
   button { padding:10px 14px; border:0; border-radius:8px; background:var(--accent); color:var(--accent-ink); font-weight:600; cursor:pointer; }
-  .opts { display:flex; gap:14px; flex-wrap:wrap; margin-top:8px; font-size:.9rem; }
+  button.secondary { padding:4px 10px; }
+  #mic[aria-pressed="true"] { background:var(--live); }
+  .opts { display:flex; gap:10px 14px; flex-wrap:wrap; align-items:center; margin-top:8px; font-size:.9rem; }
+  select { font:inherit; padding:2px 4px; background:var(--card); color:var(--text); border:1px solid var(--line); border-radius:6px; }
+  #heard { min-height:1.4em; font-size:.9rem; color:var(--live); margin-top:6px; }
   #state { font-size:.75rem; color:var(--muted); margin-top:6px; white-space:pre-wrap; overflow-wrap:anywhere; }
 </style>
 </head>
 <body>
 <main>
   <h1>Simulatore telefonata – ECL Solutions</h1>
-  <p class="muted">Scrivi come se parlassi al telefono (fr / it / de / en). Se invii mentre il receptionist sta ancora “parlando”, è un’interruzione (barge-in). Nessun numero reale collegato.</p>
+  <p class="muted">Scrivi, oppure premi 🎤 e parla come al telefono (fr / it / de / en). Se parli o invii mentre il receptionist sta ancora parlando, lo interrompi. Per la voce usa Chrome o Edge su questo computer, meglio con le cuffie. Nessun numero reale collegato.</p>
   <div id="log" aria-live="polite"></div>
-  <form id="f"><input id="in" type="text" autocomplete="off" placeholder="…" autofocus><button>Invia</button><button type="button" id="mic" hidden>🎤</button></form>
+  <div id="heard" aria-live="polite"></div>
+  <form id="f">
+    <input id="in" type="text" autocomplete="off" placeholder="…" autofocus>
+    <button>Invia</button>
+    <button type="button" id="mic" aria-pressed="false" title="Conversazione a voce">🎤</button>
+  </form>
   <div class="opts">
-    <label><input type="checkbox" id="voice"> Voce del browser (sintesi locale)</label>
-    <button type="button" id="restart" style="padding:4px 10px">Nuova chiamata</button>
+    <label><input type="checkbox" id="voice"> Voce del receptionist</label>
+    <label>Lingua microfono
+      <select id="micLang">
+        <option value="auto">automatica (segue la chiamata)</option>
+        <option value="fr">Français</option><option value="it">Italiano</option>
+        <option value="de">Deutsch</option><option value="en">English</option>
+      </select>
+    </label>
+    <button type="button" id="restart" class="secondary">Nuova chiamata</button>
     <a href="/book" target="_blank">Pagina prenotazione ↗</a>
   </div>
   <div id="state"></div>
 </main>
 <script>
-const VOICES = { fr:'fr-CH', it:'it-CH', de:'de-CH', en:'en-GB' };
+const LOCALES = { fr:'fr-CH', it:'it-CH', de:'de-CH', en:'en-GB' };
 const $ = (id) => document.getElementById(id);
-let session = null, speaking = null, bargedIn = false;
 
+let session = null;
+let callLang = null;            // lingua attuale della chiamata (dall'ultima risposta)
+let speaking = null;            // { timer, utter, text, typing, voicing }
+let bargedIn = false;
+
+// ---------- Chat ----------
 function bubble(who, text, tag) {
   const row = document.createElement('div'); row.className = 'row ' + who;
   const b = document.createElement('div'); b.className = 'bubble';
@@ -51,33 +72,48 @@ function bubble(who, text, tag) {
   row.append(b); $('log').append(row); $('log').scrollTop = 1e9; return t;
 }
 
+function finishSpeaking(s) {
+  if (speaking === s && !s.typing && !s.voicing) speaking = null;
+}
+
 function speak(reply) {
   const words = reply.text.split(' ');
   const el = bubble('bot', '', 'Receptionist' + (reply.lang ? ' · ' + reply.lang : ''));
+  const s = { text: reply.text, typing: true, voicing: false };
+  speaking = s;
   if ($('voice').checked && 'speechSynthesis' in window) {
-    const u = new SpeechSynthesisUtterance(reply.text); u.lang = VOICES[reply.lang] || 'fr-CH';
+    const u = new SpeechSynthesisUtterance(reply.text);
+    u.lang = LOCALES[reply.lang] || 'fr-CH';
+    const v = speechSynthesis.getVoices().find((x) => x.lang.replace('_', '-').startsWith(reply.lang || 'fr'));
+    if (v) u.voice = v;
+    u.onend = u.onerror = () => { s.voicing = false; finishSpeaking(s); };
+    s.voicing = true; s.utter = u;
     speechSynthesis.cancel(); speechSynthesis.speak(u);
   }
   let i = 0;
-  speaking = { el, words, timer: setInterval(() => {
+  s.timer = setInterval(() => {
     el.textContent += (i ? ' ' : '') + words[i++]; $('log').scrollTop = 1e9;
-    if (i >= words.length) { clearInterval(speaking.timer); speaking = null; }
-  }, 110) };
+    if (i >= words.length) { clearInterval(s.timer); s.typing = false; finishSpeaking(s); }
+  }, 110);
+  s.el = el;
 }
 
 function stopSpeaking() {
-  if (!speaking) return false;
-  clearInterval(speaking.timer);
-  speaking.el.textContent += ' — [interrotto]';
+  const s = speaking;
+  if (!s) return false;
+  clearInterval(s.timer);
+  if (s.typing) s.el.textContent += ' — [interrotto]';
+  else s.el.textContent += ' [interrotto]';
   speaking = null; bargedIn = true;
   if ('speechSynthesis' in window) speechSynthesis.cancel();
   return true;
 }
 
 async function start() {
-  stopSpeaking(); bargedIn = false; $('log').innerHTML = '';
+  stopSpeaking(); bargedIn = false; callLang = null; $('log').innerHTML = '';
   const r = await fetch('/api/phone/sessions', { method:'POST' }); const d = await r.json();
   session = d.id; speak(d.reply); $('state').textContent = '';
+  restartRecognition();
 }
 
 async function sendText(text) {
@@ -86,23 +122,84 @@ async function sendText(text) {
   bubble('me', text, interrupted ? 'Cliente (interrompe)' : 'Cliente');
   const r = await fetch(`/api/phone/sessions/${session}/messages`, { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({ text, interrupted }) });
   const d = await r.json();
+  const changed = d.reply.lang && d.reply.lang !== callLang;
+  callLang = d.reply.lang || callLang;
   speak(d.reply);
   $('state').textContent = 'stato: ' + JSON.stringify(d.state);
+  if (changed) restartRecognition();
 }
 
 $('f').onsubmit = (e) => { e.preventDefault(); const v = $('in').value; $('in').value = ''; sendText(v); };
 $('restart').onclick = start;
 
-// Microfono opzionale (Web Speech API del browser, se disponibile).
+// ---------- Microfono: ascolto continuo nella lingua della chiamata ----------
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-if (SR) {
-  $('mic').hidden = false;
-  $('mic').onclick = () => {
-    const rec = new SR(); rec.lang = 'fr-CH'; rec.interimResults = true;
-    rec.onresult = (ev) => { stopSpeaking(); const res = ev.results[ev.results.length - 1]; if (res.isFinal) sendText(res[0].transcript); };
-    rec.start();
-  };
+let listening = false, rec = null, recLang = null;
+
+function browserLang() {
+  return (navigator.languages || [navigator.language]).map((l) => (l || '').slice(0, 2)).find((l) => LOCALES[l]) || 'fr';
 }
+function wantedLang() {
+  const sel = $('micLang').value;
+  return LOCALES[sel !== 'auto' ? sel : (callLang || browserLang())];
+}
+
+// L'eco della voce del receptionist (altoparlanti) non deve contare come interruzione.
+const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').split(/[^a-z0-9ß]+/).filter(Boolean);
+function isEcho(transcript) {
+  if (!speaking) return false;
+  const bot = new Set(norm(speaking.text));
+  const w = norm(transcript);
+  if (!w.length) return true;
+  return w.filter((x) => bot.has(x)).length / w.length >= 0.6;
+}
+
+function heard(text) { $('heard').textContent = text ? '🎤 ' + text : (listening ? '🎤 in ascolto (' + recLang + ')…' : ''); }
+
+function startRecognition() {
+  if (!SR || !listening) return;
+  recLang = wantedLang();
+  const r = new SR();
+  r.lang = recLang; r.continuous = true; r.interimResults = true;
+  r.onresult = (ev) => {
+    for (let i = ev.resultIndex; i < ev.results.length; i++) {
+      const res = ev.results[i]; const text = res[0].transcript.trim();
+      if (!text || isEcho(text)) continue;
+      if (speaking) stopSpeaking(); // barge-in: il cliente parla sopra il receptionist
+      if (res.isFinal) { heard(''); sendText(text); } else heard(text);
+    }
+  };
+  r.onerror = (ev) => {
+    if (ev.error === 'not-allowed' || ev.error === 'service-not-allowed') {
+      listening = false; updateMic();
+      $('heard').textContent = 'Microfono non autorizzato: consenti l’accesso al microfono (serve http://localhost o https).';
+    }
+  };
+  r.onend = () => { if (rec === r && listening) setTimeout(startRecognition, 150); };
+  rec = r;
+  try { r.start(); heard(''); } catch { /* già avviato */ }
+}
+
+function stopRecognition() { const r = rec; rec = null; if (r) { try { r.abort(); } catch {} } }
+function restartRecognition() {
+  if (!listening) return;
+  if (rec && recLang === wantedLang()) return;
+  stopRecognition(); startRecognition();
+}
+function updateMic() { $('mic').setAttribute('aria-pressed', listening); if (!listening) heard(''); }
+
+if (!SR) {
+  $('mic').disabled = true; $('mic').title = 'Riconoscimento vocale non disponibile in questo browser (usa Chrome o Edge).';
+} else {
+  $('mic').onclick = () => {
+    listening = !listening;
+    if (listening && !$('voice').checked) $('voice').checked = true;
+    updateMic();
+    if (listening) startRecognition(); else stopRecognition();
+  };
+  $('micLang').onchange = () => { stopRecognition(); startRecognition(); };
+}
+if ('speechSynthesis' in window) speechSynthesis.getVoices();
 start();
 </script>
 </body>
