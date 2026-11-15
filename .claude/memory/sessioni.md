@@ -4,6 +4,7 @@ Una riga per sessione, la più recente in cima. Ricostruito dalla cronologia Git
 
 | Data | Branch | Cosa è stato fatto | Dettagli |
 |---|---|---|---|
+| 2026-11-15 | `ccr-ea5ce686-6v4crc` | Porta attrezzi saldatura a forma di V6: script, STL, 3MF, anteprima. | [porta-attrezzi-v6](../../PROJECTS/porta-attrezzi-v6/CRONOLOGIA.md) |
 | 2026-11-15 | `claude/vercel-labs-skills-setup-4v2ify` | Skill `find-skills` e `humanizer`; regola "prima le skill"; regola italiano; ricerca skill auto/ECU/RE/elettronica; sistema di memoria permanente, unito a `main` (PR #2). | [ambiente-claude](../../PROJECTS/ambiente-claude/CRONOLOGIA.md) |
 | 2026-11-08 | `claude/founder-skill-installation-80u0uy` | Aggiunte 11 skill Founder in `.claude/skills/`; aperta PR #1. | [ambiente-claude](../../PROJECTS/ambiente-claude/CRONOLOGIA.md) |
 | 2026-11-07 | `claude/ecl-receptionist-prototype-xb9bmu` | Prototipo receptionist (telefono via testo, `/book`, WhatsApp finto, calendario) e simulatore a voce. | [ecl-receptionist](../../PROJECTS/ecl-receptionist/CRONOLOGIA.md) |
