@@ -1,5 +1,5 @@
 # Porta attrezzi V6 – TODO
 
-- [ ] 2026-11-15 Prima stampa di prova e verifica che pinzette, punte e altri attrezzi entrino bene.
-- [ ] Eventuali modifiche (diametro cilindri, numero/diametro fori punte, versione per A1 mini)
-      si fanno cambiando i parametri in cima a `genera_v6.py`.
+- [ ] 2026-11-15 Ricevere dall'utente modello stampante + filamento e generare il G-code pronto
+      (slicer da riga di comando, es. OrcaSlicer/BambuStudio CLI) con supporti ad albero.
+- [ ] Stampa di prova e verifica che gli attrezzi entrino bene.
