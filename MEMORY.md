@@ -17,6 +17,7 @@ file indicati. Aggiornato: 2026-11-15.
 |---|---|---|
 | ECL Receptionist (prototipo receptionist multilingue) | Prototipo funzionante, non ancora unito a `main` | [PROJECTS/ecl-receptionist/](PROJECTS/ecl-receptionist/STATO.md) |
 | Ambiente Claude (skill, memoria, regole) | In corso | [PROJECTS/ambiente-claude/](PROJECTS/ambiente-claude/STATO.md) |
+| Auto occasioni CH (compravendita auto, Vallese) | Avviato | [PROJECTS/auto-occasioni/](PROJECTS/auto-occasioni/STATO.md) |
 
 ## Branch e Pull Request aperte
 

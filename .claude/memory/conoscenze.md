@@ -14,6 +14,7 @@ Fatti stabili e verificati. Ogni voce indica quando è stata verificata.
   da GitHub. Per cercare skill si usa la ricerca web. Per sbloccarlo bisogna aggiungere `skills.sh`
   agli host consentiti nelle impostazioni di rete dell'ambiente.
 - **Accesso GitHub** (verificato 2026-11-15): limitato al repository `abdi311/Ecl-receptionist-`.
+- **Portali auto svizzeri** (verificato 2026-11-15): AutoScout24, tutti, ricardo, comparis bloccano curl e Chromium headless con CAPTCHA (403) anche con host consentiti. Usare il browser dell'utente o link incollati.
 - **Strumenti presenti:** Node.js 22, Claude Code CLI, Chromium + Playwright.
 
 ## Il repository
