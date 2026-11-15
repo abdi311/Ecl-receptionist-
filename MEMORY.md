@@ -7,7 +7,8 @@ file indicati. Aggiornato: 2026-11-15.
 
 - **Data:** 2026-11-15 · **Branch:** `claude/vercel-labs-skills-setup-4v2ify`
 - **Fatto:** installate le skill `find-skills` e `humanizer`; creato il flusso "prima le skill";
-  ricerca di skill per diagnosi auto, ECU, reverse engineering ed elettronica; creato questo sistema di memoria.
+  ricerca di skill per diagnosi auto, ECU, reverse engineering ed elettronica; creato questo sistema di memoria
+  e unito a `main` (PR #2).
 - **Da continuare:** vedi [PROJECTS/ambiente-claude/TODO.md](PROJECTS/ambiente-claude/TODO.md).
 
 ## Progetti
@@ -21,13 +22,13 @@ file indicati. Aggiornato: 2026-11-15.
 
 | Branch | Contenuto | Stato |
 |---|---|---|
-| `main` | Solo `README.md` iniziale | — |
+| `main` | `README.md` + regole, memoria, skill `find-skills` e `humanizer` (PR #2 unita il 2026-11-15) | — |
 | `claude/ecl-receptionist-prototype-xb9bmu` | Prototipo receptionist | Nessuna PR |
 | `claude/founder-skill-installation-80u0uy` | 11 skill Founder in `.claude/skills/` | PR #1 aperta |
-| `claude/vercel-labs-skills-setup-4v2ify` | Regole, memoria, skill find-skills e humanizer | PR #2 aperta verso `main` |
+| `claude/vercel-labs-skills-setup-4v2ify` | Branch di lavoro per gli aggiornamenti della memoria | PR #2 unita; ripartito da `main` |
 
-Finché questi branch non sono uniti a `main`, una nuova sessione potrebbe partire da un branch senza
-la memoria: in quel caso recuperala con `git fetch origin` dal branch più recente qui sopra.
+La memoria è su `main`. Gli aggiornamenti successivi passano dal branch di lavoro: se una sessione
+non li trova su `main`, recuperali con `git fetch origin` da quel branch.
 
 ## Archivio
 
