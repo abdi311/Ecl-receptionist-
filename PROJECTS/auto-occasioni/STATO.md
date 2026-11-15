@@ -6,7 +6,7 @@ Aggiornato: 2026-11-15
 in base alla domanda locale.
 
 **A che punto è:** appena avviato. Strategia iniziale definita (vedi `DECISIONI.md`).
-In attesa delle risposte dell'utente su budget, tipo di operazione e sede (vedi `TODO.md`).
+Parametri raccolti (budget 10k, base Monthey). Manca il modo di leggere gli annunci (Chrome o link).
 
 **Accesso ai portali (2026-11-15):** creato l'ambiente Cloud "Auto occasioni CH" con AutoScout24,
 tutti, ricardo, carforyou, comparis, anibis, autolina, acheter-auto consentiti. Però AutoScout24,
