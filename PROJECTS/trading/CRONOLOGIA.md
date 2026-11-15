@@ -1,5 +1,10 @@
 # Trading – Cronologia
 
+### 2026-11-15 – Piano DCA simulato BTC + HYPE
+- Creati `trader/crypto/dca-plan.json`, `dca.py` (backtest / buy / status, prezzi Yahoo) e README.
+- Backtest con le stesse regole (valutati al 15/11): 12 sett. −19,3 %; 26 sett. −6,7 %; 52 sett. +0,8 %
+  (HYPE +54,5 %, BTC −13,3 %). Il DCA ha battuto l'investimento in un'unica volta in tutti e tre i casi.
+
 ### 2026-11-15 – Ricerca cripto
 - Rapporto di mercato e progetti in [ricerca-cripto-2026-11-15.md](ricerca-cripto-2026-11-15.md) (prezzi Gemini + fonti web).
 

@@ -1,0 +1,23 @@
+{
+  "nome": "DCA simulato BTC + HYPE",
+  "paper": true,
+  "inizio": "2026-11-16",
+  "settimane": 12,
+  "giorno_acquisto": "lunedi",
+  "budget_totale_usd": 3000,
+  "acquisto_settimanale_usd": { "BTC": 160, "HYPE": 40 },
+  "riserva_ribassi_usd": 600,
+  "regole_ribasso": [
+    { "asset": "BTC",  "sotto": 62000, "extra_usd": 150, "una_volta": true },
+    { "asset": "BTC",  "sotto": 58000, "extra_usd": 300, "una_volta": true },
+    { "asset": "HYPE", "sotto": 55,    "extra_usd": 150, "una_volta": true }
+  ],
+  "commissione_pct": 0.4,
+  "stop_hype": "Sospendere gli acquisti HYPE se i ricavi mensili di Hyperliquid (DefiLlama) calano piu del 30% sul mese precedente, o in caso di hack/incidente grave.",
+  "regole_fisse": [
+    "Niente leva, niente derivati, niente vendite durante le 12 settimane.",
+    "Mai superare budget_totale_usd.",
+    "Revisione completa alla settimana 12 (o prima se BTC chiude sotto 50000)."
+  ],
+  "simboli_yahoo": { "BTC": "BTC-USD", "HYPE": "HYPE32196-USD" }
+}
