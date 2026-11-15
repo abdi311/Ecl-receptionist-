@@ -1,21 +1,21 @@
 # MEMORY – indice centrale
 
 Punto di partenza per ogni sessione. Qui ci sono solo riassunti e collegamenti: i dettagli stanno nei
-file indicati. Aggiornato: 2026-11-15.
+file indicati. Aggiornato: 2026-11-15 (sessione trading).
 
 ## Ultima sessione
 
-- **Data:** 2026-11-15 · **Branch:** `claude/vercel-labs-skills-setup-4v2ify`
-- **Fatto:** installate le skill `find-skills` e `humanizer`; creato il flusso "prima le skill";
-  ricerca di skill per diagnosi auto, ECU, reverse engineering ed elettronica; creato questo sistema di memoria
-  e unito a `main` (PR #2).
-- **Da continuare:** vedi [PROJECTS/ambiente-claude/TODO.md](PROJECTS/ambiente-claude/TODO.md).
+- **Data:** 2026-11-15 · **Branch:** `ccr-5f196704-gimg0r`
+- **Fatto:** preparato il trading: 11 skill `trader-*` (Day Trader v2) in `.claude/skills/`, 4 agenti in
+  `.claude/agents/trading-*.md`, cartella `trader/` con regole in paper trading.
+- **Da continuare:** vedi [PROJECTS/trading/TODO.md](PROJECTS/trading/TODO.md).
 
 ## Progetti
 
 | Progetto | Stato | Dove |
 |---|---|---|
 | ECL Receptionist (prototipo receptionist multilingue) | Prototipo funzionante, non ancora unito a `main` | [PROJECTS/ecl-receptionist/](PROJECTS/ecl-receptionist/STATO.md) |
+| Trading (day trading, skill `trader-*`, solo paper) | Ambiente pronto, nessun trade | [PROJECTS/trading/](PROJECTS/trading/STATO.md) |
 | Ambiente Claude (skill, memoria, regole) | In corso | [PROJECTS/ambiente-claude/](PROJECTS/ambiente-claude/STATO.md) |
 
 ## Branch e Pull Request aperte
@@ -25,6 +25,7 @@ file indicati. Aggiornato: 2026-11-15.
 | `main` | `README.md` + regole, memoria, skill `find-skills` e `humanizer` (PR #2 unita il 2026-11-15) | — |
 | `claude/ecl-receptionist-prototype-xb9bmu` | Prototipo receptionist | Nessuna PR |
 | `claude/founder-skill-installation-80u0uy` | 11 skill Founder in `.claude/skills/` | PR #1 aperta |
+| `ccr-5f196704-gimg0r` | Skill e agenti di trading | PR verso `main` |
 | `claude/vercel-labs-skills-setup-4v2ify` | Branch di lavoro per gli aggiornamenti della memoria | PR #2 unita; ripartito da `main` |
 
 La memoria è su `main`. Gli aggiornamenti successivi passano dal branch di lavoro: se una sessione

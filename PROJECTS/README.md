@@ -14,3 +14,4 @@ Una cartella per progetto, sempre con gli stessi quattro file. Per un nuovo prog
 |---|---|
 | ECL Receptionist | [ecl-receptionist/](ecl-receptionist/STATO.md) |
 | Ambiente Claude (skill, memoria, regole) | [ambiente-claude/](ambiente-claude/STATO.md) |
+| Trading (skill `trader-*`) | [trading/](trading/STATO.md) |
