@@ -3,6 +3,12 @@
 Decisioni che valgono per tutto il lavoro. Più recenti in cima.
 Le decisioni di un solo progetto stanno in `PROJECTS/<progetto>/DECISIONI.md`.
 
+### 2026-11-15 – Aggiornamenti della memoria tramite PR a fine sessione
+- **Decisione:** a fine sessione gli aggiornamenti della memoria vanno su `main` con una Pull Request.
+- **Motivo:** scelta dell'utente; più sicuro che caricare direttamente su `main`.
+- **Alternative scartate:** push diretto su `main` dei soli file di memoria.
+- **Stato:** attiva (regola in `CLAUDE.md`, "Fine sessione").
+
 ### 2026-11-15 – Memoria permanente nel repository GitHub
 - **Decisione:** la memoria è fatta di file Markdown nel repository: `CLAUDE.md`, `MEMORY.md`,
   `.claude/memory/`, `PROJECTS/`, `.claude/skills/`. `CLAUDE.md` importa `MEMORY.md` con `@MEMORY.md`,

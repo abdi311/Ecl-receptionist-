@@ -2,6 +2,13 @@
 
 Errori risolti, correzioni dell'utente e soluzioni riutilizzabili. Più recenti in cima.
 
+### 2026-11-15 – App GitHub mobile: "Unable to merge – Cannot merge at this time"
+- **Problema:** l'app GitHub su Android non permetteva di unire la PR #2.
+- **Causa:** limite dell'app; per l'API la PR era "clean" (nessun conflitto, nessuna regola, nessun controllo).
+- **Soluzione:** unire dal browser (pulsante "Merge pull request" in fondo alla pagina) oppure chiedere a
+  Claude di unirla, con conferma esplicita dell'utente.
+- **Dove:** Pull Request su GitHub.
+
 ### 2026-11-15 – `npx skills find` non trova mai niente
 - **Problema:** ogni ricerca (anche "react") risponde "No skills found".
 - **Causa:** la rete dell'ambiente Cloud blocca `skills.sh` (proxy 403), non mancano le skill.
