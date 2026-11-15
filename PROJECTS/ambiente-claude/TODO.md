@@ -1,7 +1,7 @@
 # Ambiente Claude – Da fare
 
 ## Da fare
-- [ ] Approvare e creare la PR del sistema di memoria verso `main`, così ogni nuova sessione lo trova.
+- [ ] Unire la PR #2 (sistema di memoria) a `main`, così ogni nuova sessione lo trova.
 - [ ] Decidere sulla PR #1 (11 skill Founder).
 - [ ] Decidere quali skill consigliate verificare/installare (ghidra, kicad, can, uds-diagnostics).
 - [ ] Valutare una skill su misura per flash/rimappatura ECU con il Metodo ECL.
@@ -9,7 +9,7 @@
 - [ ] Facoltativo: consentire `skills.sh` nella rete dell'ambiente Cloud.
 
 ## In corso
-- [ ] Sistema di memoria permanente: file pronti sul branch, in attesa di approvazione per la PR.
+- [ ] Sistema di memoria permanente: PR #2 aperta, in attesa di unione.
 
 ## Completato
 - [x] 2026-11-15 – Installate `find-skills` e `humanizer`; regole italiano e "prima le skill".

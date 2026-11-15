@@ -24,7 +24,7 @@ file indicati. Aggiornato: 2026-11-15.
 | `main` | Solo `README.md` iniziale | — |
 | `claude/ecl-receptionist-prototype-xb9bmu` | Prototipo receptionist | Nessuna PR |
 | `claude/founder-skill-installation-80u0uy` | 11 skill Founder in `.claude/skills/` | PR #1 aperta |
-| `claude/vercel-labs-skills-setup-4v2ify` | Regole, memoria, skill find-skills e humanizer | Questo lavoro |
+| `claude/vercel-labs-skills-setup-4v2ify` | Regole, memoria, skill find-skills e humanizer | PR #2 aperta verso `main` |
 
 Finché questi branch non sono uniti a `main`, una nuova sessione potrebbe partire da un branch senza
 la memoria: in quel caso recuperala con `git fetch origin` dal branch più recente qui sopra.

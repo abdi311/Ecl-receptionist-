@@ -11,5 +11,5 @@ Aggiornato: 2026-11-15
   - Skill `find-skills` e `humanizer` copiate in `.claude/skills/` (restano tra le sessioni).
   - Ricerca skill per diagnosi auto, ECU, reverse engineering, elettronica: raccomandazioni
     in [DECISIONI.md](DECISIONI.md); niente installato.
-- **Problemi aperti:** skills.sh bloccato dalla rete dell'ambiente; memoria non ancora su `main`.
+- **Problemi aperti:** skills.sh bloccato dalla rete dell'ambiente; memoria non ancora su `main` (PR #2 aperta).
 - **Prossimo passo:** vedi [TODO.md](TODO.md).
