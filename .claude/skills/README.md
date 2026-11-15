@@ -12,6 +12,7 @@ Aggiorna questa tabella ogni volta che una skill viene aggiunta o rimossa.
 |---|---|---|---|
 | `find-skills` | [vercel-labs/skills](https://github.com/vercel-labs/skills) (`skills/find-skills`) | 2026-11-15 | Cerca skill su skills.sh. Da Cloud skills.sh è bloccato: vedi `.claude/memory/conoscenze.md`. |
 | `humanizer` | [blader/humanizer](https://github.com/blader/humanizer) v4.0.0, MIT | 2026-11-15 | Rende naturali i testi scritti da AI. Copiati solo `SKILL.md` e `LICENSE`. Duplica `anthropic-skills:humanizer`. |
+| 11 skill Day Trader (`trader-scanner`, `-news`, `-entry`, `-exit`, `-timemachine`, `-risk`, `-budget`, `-broker`, `-alerts`, `-analyst`, `-pelosi`) | [Jakeschincariol/day-trader-skill](https://github.com/Jakeschincariol/day-trader-skill) v2.0.0 (`3d0f4ef`), MIT | 2026-11-15 | Day trading, paper di default, nessun ordine senza conferma. Usate dagli agenti in `.claude/agents/trading-*.md`. Progetto: [PROJECTS/trading/](../../PROJECTS/trading/STATO.md). |
 
 Per reinstallarle a livello utente:
 

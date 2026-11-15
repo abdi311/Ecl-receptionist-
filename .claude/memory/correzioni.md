@@ -2,6 +2,10 @@
 
 Errori risolti, correzioni dell'utente e soluzioni riutilizzabili. Più recenti in cima.
 
+### 2026-11-15 – Modalità automatica blocca codice scaricato
+- **Problema:** in Cloud la modalità automatica ha rifiutato di eseguire i test di un pacchetto appena clonato e un `curl` verso le fonti dati.
+- **Soluzione:** leggere il codice a mano (grep di URL, `subprocess`, `eval`) e lasciare all'utente il via libera per eseguirlo, oppure aggiungere una regola di permesso per Bash nelle impostazioni.
+
 ### 2026-11-15 – App GitHub mobile: "Unable to merge – Cannot merge at this time"
 - **Problema:** l'app GitHub su Android non permetteva di unire la PR #2.
 - **Causa:** limite dell'app; per l'API la PR era "clean" (nessun conflitto, nessuna regola, nessun controllo).
