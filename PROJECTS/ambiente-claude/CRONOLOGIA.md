@@ -2,6 +2,12 @@
 
 Più recente in cima.
 
+### 2026-11-15 (pomeriggio)
+- Creata la skill `metodo-ecl-centraline` con `skill-creator`: SKILL.md, 4 procedure in `references/`,
+  scheda lavoro in `assets/`, script `scripts/confronta_dump.py`.
+- Test rapidi con `claude -p` su 3 casi (clonazione EDC17C64, stage 1 con richiesta di togliere il FAP,
+  due letture EEPROM diverse): tutti superati. Risultati non salvati nel repository.
+
 ### 2026-11-15
 - Installata `find-skills` (vercel-labs/skills).
 - Aggiunta regola "prima le skill" in `CLAUDE.md`, poi regola "sempre in italiano".

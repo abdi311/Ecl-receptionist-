@@ -3,12 +3,11 @@
 ## Da fare
 - [ ] Decidere sulla PR #1 (11 skill Founder).
 - [ ] Decidere quali skill consigliate verificare/installare (ghidra, kicad, can, uds-diagnostics).
-- [ ] Valutare una skill su misura per flash/rimappatura ECU con il Metodo ECL.
 - [ ] Decidere se tenere entrambe le `humanizer` o rimuovere quella del repository.
 - [ ] Facoltativo: consentire `skills.sh` nella rete dell'ambiente Cloud.
 
 ## In corso
-- (niente)
+- [ ] Skill `metodo-ecl-centraline`: bozza testata (3 casi), in attesa dei commenti dell'utente.
 
 ## Completato
 - [x] 2026-11-15 – Sistema di memoria permanente unito a `main` (PR #2).

@@ -11,6 +11,7 @@ Aggiorna questa tabella ogni volta che una skill viene aggiunta o rimossa.
 | Skill | Fonte | Aggiunta | Note |
 |---|---|---|---|
 | `find-skills` | [vercel-labs/skills](https://github.com/vercel-labs/skills) (`skills/find-skills`) | 2026-11-15 | Cerca skill su skills.sh. Da Cloud skills.sh è bloccato: vedi `.claude/memory/conoscenze.md`. |
+| `metodo-ecl-centraline` | Creata su misura (estende `anthropic-skills:metodo-ecl`) | 2026-11-15 | Clonazione, riparazione, aggiornamento e rimappatura ECU con cancelli di sicurezza, script `confronta_dump.py` e scheda lavoro. Antinquinamento sempre intatto. |
 | `humanizer` | [blader/humanizer](https://github.com/blader/humanizer) v4.0.0, MIT | 2026-11-15 | Rende naturali i testi scritti da AI. Copiati solo `SKILL.md` e `LICENSE`. Duplica `anthropic-skills:humanizer`. |
 
 Per reinstallarle a livello utente:
