@@ -12,3 +12,7 @@ Before starting any task:
 6. If no suitable skill exists, complete the task with your own capabilities or propose creating a custom skill.
 
 Do not start complex work before checking for relevant skills.
+
+# Lingua
+
+Rispondi sempre in italiano, a meno che l'utente non chieda esplicitamente un'altra lingua.
