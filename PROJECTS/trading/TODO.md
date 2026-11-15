@@ -1,6 +1,7 @@
 # Trading – TODO
 
 ## Da fare
+- [ ] 17/11/2026: conti Nvidia, rilanciare `python3 trader/ia/ai_sim.py --json` e confrontare.
 - [ ] DCA simulato: ogni lunedì `python3 trader/crypto/dca.py buy` per 12 settimane (dal 16/11/2026), revisione alla 12ª.
 - [ ] Controllo mensile ricavi Hyperliquid su DefiLlama (regola di stop HYPE).
 - [ ] Confermare le regole in `trader/config.json` (budget, perdita max per trade e al giorno, trade al giorno) con `/trader-budget`.

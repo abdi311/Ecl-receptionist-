@@ -1,5 +1,8 @@
 # Trading – Cronologia
 
+### 2026-11-15 – Ricerca mercato IA
+- Rapporto [ricerca-ia-2026-11-15.md](ricerca-ia-2026-11-15.md) e script `trader/ia/ai_sim.py` (storico, lump vs DCA, Monte Carlo, scenari di crisi su 6 panieri e 5 portafogli).
+
 ### 2026-11-15 – Piano DCA simulato BTC + HYPE
 - Creati `trader/crypto/dca-plan.json`, `dca.py` (backtest / buy / status, prezzi Yahoo) e README.
 - Backtest con le stesse regole (valutati al 15/11): 12 sett. −19,3 %; 26 sett. −6,7 %; 52 sett. +0,8 %
