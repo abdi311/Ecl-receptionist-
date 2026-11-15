@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 .claude/skills/trader-*:*)",
+      "Bash(python3 /home/user/Ecl-receptionist-/.claude/skills/trader-*:*)"
+    ]
+  }
+}
