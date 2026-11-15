@@ -40,6 +40,8 @@ questo repository.
 2. Aggiungi una riga in `.claude/memory/sessioni.md`.
 3. Aggiorna la sezione "Ultima sessione" di `MEMORY.md`.
 4. Fai commit e push su GitHub sul branch di lavoro.
+5. Apri una Pull Request verso `main` con gli aggiornamenti della sessione. Non caricare mai
+   direttamente su `main`. La PR la unisce l'utente, oppure Claude solo su sua richiesta esplicita.
 
 ### Regole della memoria
 - Non cancellare informazioni importanti senza autorizzazione: se qualcosa non è più valido,
