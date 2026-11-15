@@ -1,5 +1,8 @@
 # Trading – Cronologia
 
+### 2026-11-15 – Ricerca cripto
+- Rapporto di mercato e progetti in [ricerca-cripto-2026-11-15.md](ricerca-cripto-2026-11-15.md) (prezzi Gemini + fonti web).
+
 ### 2026-11-15 – Prima scansione
 - Aggiunta regola di permesso per gli script `trader-*` in `.claude/settings.json`.
 - La rete `Default` bloccava Yahoo e Nasdaq: creato e attivato l'ambiente `Ecl-receptionist-` con gli host dei dati.
