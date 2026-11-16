@@ -5,11 +5,10 @@ file indicati. Aggiornato: 2026-11-15.
 
 ## Ultima sessione
 
-- **Data:** 2026-11-15 · **Branch:** `claude/vercel-labs-skills-setup-4v2ify`
-- **Fatto:** installate le skill `find-skills` e `humanizer`; creato il flusso "prima le skill";
-  ricerca di skill per diagnosi auto, ECU, reverse engineering ed elettronica; creato questo sistema di memoria
-  e unito a `main` (PR #2).
-- **Da continuare:** vedi [PROJECTS/ambiente-claude/TODO.md](PROJECTS/ambiente-claude/TODO.md).
+- **Data:** 2026-11-15 · **Branch:** `ccr-ea5ce686-6v4crc`
+- **Fatto:** porta attrezzi V6: v2 motore completo, render realistici, 3MF/STL. Manca il G-code (aspetta stampante e filamento).
+- **Da continuare:** vedi [PROJECTS/porta-attrezzi-v6/TODO.md](PROJECTS/porta-attrezzi-v6/TODO.md)
+  e [PROJECTS/ambiente-claude/TODO.md](PROJECTS/ambiente-claude/TODO.md).
 
 ## Progetti
 
@@ -17,6 +16,7 @@ file indicati. Aggiornato: 2026-11-15.
 |---|---|---|
 | ECL Receptionist (prototipo receptionist multilingue) | Prototipo funzionante, non ancora unito a `main` | [PROJECTS/ecl-receptionist/](PROJECTS/ecl-receptionist/STATO.md) |
 | Ambiente Claude (skill, memoria, regole) | In corso | [PROJECTS/ambiente-claude/](PROJECTS/ambiente-claude/STATO.md) |
+| Porta attrezzi V6 (stampa 3D Bambu Lab) | v2 motore completo + render; manca G-code | [PROJECTS/porta-attrezzi-v6/](PROJECTS/porta-attrezzi-v6/STATO.md) |
 
 ## Branch e Pull Request aperte
 

@@ -1,0 +1,166 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:#111;overflow:hidden}</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+</head><body><div style="position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 55%,rgba(0,0,0,0) 55%,rgba(0,0,0,0.45) 100%);z-index:2"></div>
+<script type="module">
+import * as THREE from 'three';
+import {STLLoader} from 'three/addons/loaders/STLLoader.js';
+import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+import {toCreasedNormals, mergeVertices} from 'three/addons/utils/BufferGeometryUtils.js';
+import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
+import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
+import {GTAOPass} from 'three/addons/postprocessing/GTAOPass.js';
+import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
+
+const P = new URLSearchParams(location.search);
+const W = +(P.get('w')||1600), H = +(P.get('h')||1100);
+const mode = P.get('mode')||'color', view = P.get('view')||'front';
+const renderer = new THREE.WebGLRenderer({antialias:true, preserveDrawingBuffer:true});
+renderer.setSize(W,H); renderer.setPixelRatio(1);
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.85;
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+// studio: ambiente scuro con softbox, per riflessi da foto prodotto
+const env = new THREE.Scene();
+env.add(new THREE.Mesh(new THREE.SphereGeometry(50,32,16), new THREE.MeshBasicMaterial({color:0x15181b, side:THREE.BackSide})));
+const sb=(w,h,p,int,col=0xffffff)=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h), new THREE.MeshBasicMaterial({color:new THREE.Color(col).multiplyScalar(int), side:THREE.DoubleSide})); m.position.set(...p); m.lookAt(0,0,0); env.add(m);};
+sb(40,30,[0,45,5],3.0);            // softbox sopra
+sb(10,40,[-40,10,25],4.0,0xffeedd); // striscia sinistra-fronte
+sb(10,40,[40,15,-25],2.5,0xcfe0ff); // striscia destra-retro
+sb(30,12,[0,5,-45],1.2);           // fondale
+const floorEnv=new THREE.Mesh(new THREE.PlaneGeometry(100,100), new THREE.MeshBasicMaterial({color:0x22303a})); floorEnv.rotation.x=-Math.PI/2; floorEnv.position.y=-12; env.add(floorEnv);
+scene.environment = pmrem.fromScene(env, 0.02).texture;
+scene.environmentIntensity = 1.35;
+
+// sfondo sfumato
+const bg = document.createElement('canvas'); bg.width=16; bg.height=512;
+const g = bg.getContext('2d'); const gr = g.createLinearGradient(0,0,0,512);
+gr.addColorStop(0,'#3a4148'); gr.addColorStop(1,'#0e1113'); g.fillStyle=gr; g.fillRect(0,0,16,512);
+const bgt = new THREE.CanvasTexture(bg); bgt.colorSpace = THREE.SRGBColorSpace; scene.background = bgt;
+
+// tappetino antistatico con grana
+const mc = document.createElement('canvas'); mc.width=mc.height=1024; const m2=mc.getContext('2d');
+m2.fillStyle='#26343b'; m2.fillRect(0,0,1024,1024);
+for(let i=0;i<90000;i++){const v=Math.random()*30-15; m2.fillStyle=`rgba(${38+v},${52+v},${59+v},0.5)`; m2.fillRect(Math.random()*1024,Math.random()*1024,2,2);}
+m2.strokeStyle="rgba(255,255,255,0.0)"; m2.lineWidth=2;
+for(let i=0;i<=1024;i+=128){m2.beginPath();m2.moveTo(i,0);m2.lineTo(i,1024);m2.stroke();m2.beginPath();m2.moveTo(0,i);m2.lineTo(1024,i);m2.stroke();}
+const mt = new THREE.CanvasTexture(mc); mt.colorSpace=THREE.SRGBColorSpace; mt.wrapS=mt.wrapT=THREE.RepeatWrapping; mt.repeat.set(3,3); mt.anisotropy=8;
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(1400,1400), new THREE.MeshStandardMaterial({map:mt, roughness:0.95}));
+ground.rotation.x=-Math.PI/2; ground.receiveShadow=true; scene.add(ground);
+
+const key = new THREE.DirectionalLight(0xffeedd, 4.2); key.position.set(-380,360,160); key.castShadow=true;
+key.shadow.mapSize.set(4096,4096); key.shadow.bias=-0.0004; key.shadow.normalBias=0.6;
+Object.assign(key.shadow.camera,{left:-260,right:260,top:260,bottom:-260,near:50,far:1200}); key.shadow.radius=4;
+scene.add(key);
+const rim = new THREE.DirectionalLight(0xbcd4ff, 2.2); rim.position.set(300,250,-320); scene.add(rim);
+scene.add(new THREE.HemisphereLight(0xdfe8ff, 0x202428, 0.2));
+
+const M = (o)=>new THREE.MeshPhysicalMaterial(o);
+const mats = {
+  blocco: M({color:0x55595d, metalness:0.75, roughness:0.62}),
+  teste: M({color:0x8f9499, metalness:0.85, roughness:0.55}),
+  coperchi: M({color:0x8c0f13, metalness:0.3, roughness:0.5, clearcoat:0.6, clearcoatRoughness:0.35}),
+  coppa: M({color:0x1c1d1f, metalness:0.5, roughness:0.45, clearcoat:0.4}),
+  aspirazione: M({color:0xbfc4c9, metalness:1.0, roughness:0.28}),
+  scarichi: M({color:0x6e4c3a, metalness:0.8, roughness:0.6}),
+  distribuzione: M({color:0x878c91, metalness:0.85, roughness:0.5}),
+  pulegge: M({color:0x2b2c2f, metalness:0.85, roughness:0.35}),
+  cinghia: M({color:0x121212, metalness:0.0, roughness:0.85}),
+  filtro: M({color:0x1d4fa3, metalness:0.3, roughness:0.3, clearcoat:0.8}),
+};
+const printMat = M({color:0x8a8f96, metalness:0.0, roughness:0.55, sheen:0.3});
+if (mode==='orange') printMat.color.set(0xd2541d);
+
+const root = new THREE.Group(); root.rotation.x = -Math.PI/2; scene.add(root);  // modello Z-su -> Y-su
+const loader = new STLLoader();
+const names = Object.keys(mats);
+const info = await (await fetch('model/render/assi.json')).json();
+for (const n of names) {
+  let geo = loader.parse(await (await fetch(`model/render/parti/${n}.stl`)).arrayBuffer());
+  geo = toCreasedNormals(geo, Math.PI/5);
+  const mesh = new THREE.Mesh(geo, mode==='color' ? mats[n] : printMat);
+  mesh.castShadow = mesh.receiveShadow = true; root.add(mesh);
+}
+
+// ---------- attrezzi nei pozzetti (coordinate modello, Z su)
+const steel = M({color:0xd9dde2, metalness:1, roughness:0.18});
+function placeAlong(obj, a, b){ // obj costruito lungo +Y con base a y=0
+  const A=new THREE.Vector3(...a), B=new THREE.Vector3(...b), d=B.clone().sub(A);
+  obj.position.copy(A); obj.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), d.normalize()); root.add(obj);
+}
+function shadowAll(o){o.traverse(c=>{if(c.isMesh){c.castShadow=c.receiveShadow=true;}}); return o;}
+function tweezers(len, spread, mat){
+  const gp=new THREE.Group();
+  for(const s of [-1,1]){
+    const geo=new THREE.BoxGeometry(7,len,1.3,1,8,1); const p=geo.attributes.position;
+    for(let i=0;i<p.count;i++){const t=(p.getY(i)+len/2)/len; p.setX(i,p.getX(i)*(0.25+0.75*t)); p.setZ(i,p.getZ(i)+s*(1.2+spread*t*t));}
+    geo.computeVertexNormals(); const m=new THREE.Mesh(geo,mat); m.position.y=len/2; gp.add(m);
+  }
+  const grip=new THREE.Mesh(new THREE.BoxGeometry(8,6,spread*2+5), M({color:0x1a1a1a,roughness:0.6})); grip.position.y=len-6; gp.add(grip);
+  return shadowAll(gp);
+}
+function screwdriver(col, shaft){
+  const gp=new THREE.Group();
+  const s=new THREE.Mesh(new THREE.CylinderGeometry(2.4,2.4,shaft,24),steel); s.position.y=shaft/2; gp.add(s);
+  const h=new THREE.Mesh(new THREE.CylinderGeometry(8,9.5,68,6,1), M({color:col,roughness:0.4,clearcoat:0.5,transmission:0.15})); h.position.y=shaft+34; gp.add(h);
+  const c=new THREE.Mesh(new THREE.CylinderGeometry(7,9,6,24), M({color:0x111111,roughness:0.5})); c.position.y=shaft+71; gp.add(c);
+  return shadowAll(gp);
+}
+function brush(){
+  const gp=new THREE.Group();
+  const h=new THREE.Mesh(new THREE.CylinderGeometry(3.5,4.5,150,24), M({color:0xc9a26b,roughness:0.6})); h.position.y=75; gp.add(h);
+  const f=new THREE.Mesh(new THREE.CylinderGeometry(5,5,14,24),M({color:0xc7a14a,metalness:1,roughness:0.3})); f.position.y=150; gp.add(f);
+  const b=new THREE.Mesh(new THREE.CylinderGeometry(6,4.6,22,24),M({color:0x222018,roughness:0.95})); b.position.y=168; gp.add(b);
+  return shadowAll(gp);
+}
+function tip(){
+  const gp=new THREE.Group();
+  const s=new THREE.Mesh(new THREE.CylinderGeometry(3.1,3.1,46,24),steel); s.position.y=23; gp.add(s);
+  const g2=new THREE.Mesh(new THREE.CylinderGeometry(3.25,3.25,7,24),M({color:0xc8a040,metalness:1,roughness:0.3})); g2.position.y=40; gp.add(g2);
+  const c=new THREE.Mesh(new THREE.ConeGeometry(3.1,9,24),M({color:0x3a3a3a,metalness:1,roughness:0.4})); c.position.y=50.5; gp.add(c);
+  return shadowAll(gp);
+}
+if (P.get('tools')!=='0') {
+  const pz=info.pozzetti, ext=(a,b,k)=>a.map((v,i)=>v+(a[i]-b[i])*k);
+  const put=(i,obj)=>{const p=pz[i]; placeAlong(obj, ext(p.bottom,p.top,-0.02), p.top);};
+  put(0, tweezers(125,4,steel));
+  put(1, screwdriver(0xd8201c,95));
+  put(2, brush());
+  put(3, tweezers(118,3,M({color:0x26272a,metalness:0.6,roughness:0.4})));
+  put(4, screwdriver(0xe8b41c,90));
+  info.punte.forEach((t,i)=>{ if(i%3!==2){ const o=tip(); o.position.set(t[0],t[1],t[2]-34); o.rotation.x=Math.PI/2; root.add(o);} });
+}
+if (P.get('spool')==='1') {
+  const sp=new THREE.Group();
+  const drum=new THREE.Mesh(new THREE.CylinderGeometry(22,22,26,48),M({color:0x9da3a8,metalness:1,roughness:0.45})); sp.add(drum);
+  for(const y of[-14,14]){const f=new THREE.Mesh(new THREE.CylinderGeometry(30,30,2.5,48),M({color:0x1b1b1b,roughness:0.5})); f.position.y=y; sp.add(f);}
+  sp.position.set(info.ingombro[0]+55, info.ingombro[1]*0.25, 31); sp.rotation.x=Math.PI/2; shadowAll(sp); root.add(sp);
+}
+
+// ---------- camera
+const E = info.ingombro, c = new THREE.Vector3(E[0]/2, E[2]*0.42, -E[1]/2);
+const cams = {
+  front:   [[-330, 170, 250], [0,-5,0], 30],
+  hero:    [[-300, 150, 300], [0,20,0], 30],
+  side:    [[-120, 160, 420], [0,-5,0], 33],
+  top:     [[-150, 420, 140], [0,0,0], 34],
+  rear:    [[ 420, 260, -240], [0,0,0], 32],
+  close:   [[-170, 230, 130], [10,25,-5], 30],
+};
+const [pos, off, fov] = cams[view]; const K = +(P.get('k')||1.35); pos[0]*=K; pos[1]*=K; pos[2]*=K;
+const cam = new THREE.PerspectiveCamera(fov, W/H, 5, 4000);
+cam.position.copy(c.clone().add(new THREE.Vector3(...pos)).add(new THREE.Vector3(0,0,0)));
+cam.lookAt(c.clone().add(new THREE.Vector3(...off)));
+ground.position.set(c.x, 0, c.z);
+key.target.position.copy(c); scene.add(key.target);
+
+const comp = new EffectComposer(renderer);
+comp.addPass(new RenderPass(scene, cam));
+const ao = new GTAOPass(scene, cam, W, H); ao.updateGtaoMaterial({radius: 14, distanceExponent: 1.6, thickness: 6, scale: 1.4}); ao.blendIntensity = 1.0;
+comp.addPass(ao);
+comp.addPass(new OutputPass());
+comp.render();
+window.DONE = true;
+</script></body></html>
