@@ -235,7 +235,7 @@ try:
     cs = CrossSection(polys, FillRule.EvenOdd)
     bb = cs.bounds()
     cs = cs.translate([-(bb[0] + bb[2]) / 2, -(bb[1] + bb[3]) / 2]).rotate(-90)
-    parts["aspirazione"] += Manifold.extrude(cs, 3).translate([108, 0, 151])
+    parts["scritta"] = Manifold.extrude(cs, 3.6).translate([108, 0, 150.4])
 except Exception as e:  # noqa
     print("scritta saltata:", e)
 
@@ -260,6 +260,18 @@ print("watertight:", mesh.is_watertight, "| corpi:", len(mesh.split(only_waterti
       "| volume cm3:", round(mesh.volume / 1000, 1), "| ingombro mm:", np.round(mesh.extents, 1))
 mesh.export("porta_attrezzi_V6.stl")
 mesh.export("porta_attrezzi_V6.3mf")
+
+# divisione per AMS a 2 colori: rosso = coperchi, cinghia, filtro, scritta; giallo = il resto
+red = Manifold()
+for k in ("coperchi", "cinghia", "filtro", "scritta"):
+    red += parts[k]
+red = red ^ whole
+yellow = whole - red
+for name, m in (("giallo", yellow), ("rosso", red)):
+    t = tm(m)
+    t.apply_translation(off)
+    t.export(f"colore_{name}.stl")
+    print(name, "volume cm3:", round(m.volume() / 1000, 1))
 
 os.makedirs("render/parti", exist_ok=True)
 for k, m in parts.items():
