@@ -4,6 +4,13 @@ Fatti stabili e verificati. Ogni voce indica quando è stata verificata.
 
 ## Ambiente Cloud di Claude Code
 
+- **`/plugin` non funziona nelle sessioni Cloud** (verificato 2026-11-17), ma il comando `claude`
+  sì: `claude plugin list --json` e gli installer via `npx` installano plugin. Un plugin in ambito
+  `project` scrive `extraKnownMarketplaces` + `enabledPlugins` in `.claude/settings.json` del
+  repository, che resta tra le sessioni. Le preferenze del plugin (es. profilo hook di ECC) finiscono
+  invece in `~/.claude/settings.json` e si perdono con il container.
+- **Eseguire pacchetti npm di terzi** (`npx ...`) viene bloccato dal controllo permessi automatico
+  finché l'utente non lo approva esplicitamente in chat (verificato 2026-11-17).
 - **Il container è temporaneo** (verificato 2026-11-15). Viene eliminato dopo un periodo di
   inattività. Tutto ciò che sta fuori dal repository (es. `~/.claude/skills/`, `~/.agents/`) si perde.
   Le skill da conservare vanno in `.claude/skills/` del repository.

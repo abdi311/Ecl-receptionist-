@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "skills": {
+    "ai-video": {
+      "source": "0xadvait/ai-video-skill",
+      "commit": "79b1edf6be61b6d95cd3f03ffced5945e7d0bf34",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "ad4fece1a00cfb2a0756a6633c4f1113a3b83207e7054a2c2031e6abf9cae6b5"
+    },
+    "teardown": {
+      "source": "elvarofficial/teardown",
+      "commit": "a91262ac1109051e014662d42ecb0b7bc1f113b1",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "6bdc5a8070f97648cb6b2769499c7c93f7cefb829983a6a1033a0a0c4defc4a0"
+    }
+  }
+}

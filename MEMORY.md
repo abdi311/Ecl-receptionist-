@@ -1,14 +1,13 @@
 # MEMORY – indice centrale
 
 Punto di partenza per ogni sessione. Qui ci sono solo riassunti e collegamenti: i dettagli stanno nei
-file indicati. Aggiornato: 2026-11-15.
+file indicati. Aggiornato: 2026-11-17.
 
 ## Ultima sessione
 
-- **Data:** 2026-11-15 · **Branch:** `claude/vercel-labs-skills-setup-4v2ify`
-- **Fatto:** installate le skill `find-skills` e `humanizer`; creato il flusso "prima le skill";
-  ricerca di skill per diagnosi auto, ECU, reverse engineering ed elettronica; creato questo sistema di memoria
-  e unito a `main` (PR #2).
+- **Data:** 2026-11-17 · **Branch:** `ccr-145a7a38-sw4voh`
+- **Fatto:** installato il plugin ECC (`ecc@ecc`, ambito project, hook minimal) in `.claude/settings.json`;
+  `/plugin` non funziona in Cloud, usato l'installer npm. Installate le skill `teardown` (simulatori 3D, test V8 riuscito) e `ai-video`.
 - **Da continuare:** vedi [PROJECTS/ambiente-claude/TODO.md](PROJECTS/ambiente-claude/TODO.md).
 
 ## Progetti
@@ -25,6 +24,7 @@ file indicati. Aggiornato: 2026-11-15.
 | `main` | `README.md` + regole, memoria, skill `find-skills` e `humanizer` (PR #2 unita il 2026-11-15) | — |
 | `claude/ecl-receptionist-prototype-xb9bmu` | Prototipo receptionist | Nessuna PR |
 | `claude/founder-skill-installation-80u0uy` | 11 skill Founder in `.claude/skills/` | PR #1 aperta |
+| `ccr-145a7a38-sw4voh` | Plugin ECC + memoria 2026-11-17 | PR verso `main` |
 | `claude/vercel-labs-skills-setup-4v2ify` | Branch di lavoro per gli aggiornamenti della memoria | PR #2 unita; ripartito da `main` |
 
 La memoria è su `main`. Gli aggiornamenti successivi passano dal branch di lavoro: se una sessione

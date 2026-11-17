@@ -2,6 +2,14 @@
 
 Più recente in cima.
 
+### 2026-11-17
+- Riepilogo per l'utente di skill installate e configurazione dell'ambiente Cloud (Default, rete limitata).
+- `/plugin` non disponibile in Cloud: installato ECC con l'installer npm ufficiale (anteprima, poi conferma).
+- Creato `.claude/settings.json` (marketplace ECC + plugin `ecc@ecc` attivo).
+- Installata la skill `teardown` (elvarofficial/teardown) in `.claude/skills/` su richiesta dell'utente; il nome digitato (`elvairofficial`) era sbagliato, confermato quello giusto; codice controllato prima.
+- Provata `teardown`: costruito il simulatore V8 interattivo (esempio della skill), controllato a fotogrammi, inviato all'utente.
+- Installata la skill `ai-video` (0xadvait/ai-video-skill) in `.claude/skills/`; codice controllato prima.
+
 ### 2026-11-15
 - Installata `find-skills` (vercel-labs/skills).
 - Aggiunta regola "prima le skill" in `CLAUDE.md`, poi regola "sempre in italiano".
