@@ -3,6 +3,17 @@
 Più recenti in cima. Decisioni generali (memoria, lingua, prima le skill) in
 [.claude/memory/decisioni.md](../../.claude/memory/decisioni.md).
 
+### 2026-11-17 – Plugin ECC (Everything Claude Code) installato
+- **Decisione:** installare `ecc@ecc` da [affaan-m/ECC](https://github.com/affaan-m/ECC) (v2.2.3, MIT),
+  ambito `project` (l'utente lo vuole permanente), hook `minimal` (consigliato; l'utente non ha scelto).
+- **Come:** `npx --package ecc-universal ecc setup --mode claude-plugin --scope project --hooks minimal`,
+  dopo anteprima `--dry-run` e conferma dell'utente. Risultato: `.claude/settings.json`.
+- **Note:** 327 skill, 72 agenti, 98 comandi, hook automatici, server MCP `chrome-devtools`. Le
+  dipendenze npm del plugin non sono state installate (il suo `package.json` usa `overrides`).
+  Il profilo hook `minimal` è salvato fuori dal repository: nelle sessioni nuove potrebbe valere il
+  profilo predefinito di ECC.
+- **Stato:** attiva.
+
 ### 2026-11-15 – Nessuna skill di memoria di terzi
 - **Decisione:** sistema di memoria scritto su misura invece di skill come Memory Kit o claude-memory-kit.
 - **Motivo:** skills.sh non è raggiungibile per verificarle; le richieste dell'utente (struttura

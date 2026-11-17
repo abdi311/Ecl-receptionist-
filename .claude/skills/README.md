@@ -20,6 +20,12 @@ npx skills add vercel-labs/skills --skill find-skills -g -a claude-code
 npx skills add blader/humanizer -g -a claude-code
 ```
 
+## Plugin attivi nel progetto
+
+| Plugin | Fonte | Aggiunto | Note |
+|---|---|---|---|
+| `ecc@ecc` (Everything Claude Code) v2.2.3 | [affaan-m/ECC](https://github.com/affaan-m/ECC), MIT | 2026-11-17 | Attivato in `.claude/settings.json`; 327 skill, 72 agenti, 98 comandi, hook `minimal`. Vedi [DECISIONI](../../PROJECTS/ambiente-claude/DECISIONI.md). |
+
 ## In attesa (altri branch)
 
 | Skill | Dove | Stato |

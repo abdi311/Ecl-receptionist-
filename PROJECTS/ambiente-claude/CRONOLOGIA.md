@@ -2,6 +2,11 @@
 
 Più recente in cima.
 
+### 2026-11-17
+- Riepilogo per l'utente di skill installate e configurazione dell'ambiente Cloud (Default, rete limitata).
+- `/plugin` non disponibile in Cloud: installato ECC con l'installer npm ufficiale (anteprima, poi conferma).
+- Creato `.claude/settings.json` (marketplace ECC + plugin `ecc@ecc` attivo).
+
 ### 2026-11-15
 - Installata `find-skills` (vercel-labs/skills).
 - Aggiunta regola "prima le skill" in `CLAUDE.md`, poi regola "sempre in italiano".
