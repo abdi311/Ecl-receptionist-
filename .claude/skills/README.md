@@ -11,6 +11,7 @@ Aggiorna questa tabella ogni volta che una skill viene aggiunta o rimossa.
 | Skill | Fonte | Aggiunta | Note |
 |---|---|---|---|
 | `find-skills` | [vercel-labs/skills](https://github.com/vercel-labs/skills) (`skills/find-skills`) | 2026-11-15 | Cerca skill su skills.sh. Da Cloud skills.sh è bloccato: vedi `.claude/memory/conoscenze.md`. |
+| `teardown` | [elvarofficial/teardown](https://github.com/elvarofficial/teardown), commit `a91262a`, MIT | 2026-11-17 | Simulatori 3D interattivi di macchine reali (HTML offline) + video 60 fps. 16 MB (14 MB sono GIF demo in `docs/`). Per usarla: `npm install` nella cartella + `ffmpeg` per i video. Codice controllato: nessuna chiamata di rete. Versione registrata in `skills-lock.json`. |
 | `humanizer` | [blader/humanizer](https://github.com/blader/humanizer) v4.0.0, MIT | 2026-11-15 | Rende naturali i testi scritti da AI. Copiati solo `SKILL.md` e `LICENSE`. Duplica `anthropic-skills:humanizer`. |
 
 Per reinstallarle a livello utente:
@@ -18,6 +19,7 @@ Per reinstallarle a livello utente:
 ```bash
 npx skills add vercel-labs/skills --skill find-skills -g -a claude-code
 npx skills add blader/humanizer -g -a claude-code
+npx skills add elvarofficial/teardown -a claude-code -y   # nel progetto
 ```
 
 ## Plugin attivi nel progetto

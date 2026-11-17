@@ -7,7 +7,7 @@ file indicati. Aggiornato: 2026-11-17.
 
 - **Data:** 2026-11-17 · **Branch:** `ccr-145a7a38-sw4voh`
 - **Fatto:** installato il plugin ECC (`ecc@ecc`, ambito project, hook minimal) in `.claude/settings.json`;
-  `/plugin` non funziona in Cloud, usato l'installer npm.
+  `/plugin` non funziona in Cloud, usato l'installer npm. Installata la skill `teardown` (simulatori 3D).
 - **Da continuare:** vedi [PROJECTS/ambiente-claude/TODO.md](PROJECTS/ambiente-claude/TODO.md).
 
 ## Progetti

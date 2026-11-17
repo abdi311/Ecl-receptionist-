@@ -13,5 +13,6 @@ Aggiornato: 2026-11-17
     in [DECISIONI.md](DECISIONI.md); niente installato.
   - 2026-11-17: plugin ECC (`ecc@ecc` v2.2.3) attivo per il progetto tramite `.claude/settings.json`,
     hook `minimal`. Dettagli in [DECISIONI.md](DECISIONI.md).
+  - 2026-11-17: skill `teardown` (simulatori 3D di macchine) in `.claude/skills/teardown`.
 - **Problemi aperti:** skills.sh bloccato dalla rete dell'ambiente; nessuno sulla memoria: è su `main` dal 2026-11-15 (PR #2).
 - **Prossimo passo:** vedi [TODO.md](TODO.md).
