@@ -14,6 +14,10 @@ Fatti stabili e verificati. Ogni voce indica quando è stata verificata.
   da GitHub. Per cercare skill si usa la ricerca web. Per sbloccarlo bisogna aggiungere `skills.sh`
   agli host consentiti nelle impostazioni di rete dell'ambiente.
 - **Accesso GitHub** (verificato 2026-11-15): limitato al repository `abdi311/Ecl-receptionist-`.
+- **Ambiente "Codifica chiavi (manuali)"** (creato 2026-11-19): consente cdn.shopify.com, autel.us,
+  magicmotorsport.shop, obdexpress.co.uk, manuals.plus, manualslib, manualshive e alcuni blog Xhorse/OBDSTAR.
+  Scribd non è consentito. Il PC dell'utente non è collegato in Remote Control (nessuna cartella condivisa).
+- **PDF:** `pdftotext` è installato e serve per leggere i manuali scaricati.
 - **Strumenti presenti:** Node.js 22, Claude Code CLI, Chromium + Playwright.
 
 ## Il repository

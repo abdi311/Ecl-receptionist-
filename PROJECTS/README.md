@@ -13,4 +13,5 @@ Una cartella per progetto, sempre con gli stessi quattro file. Per un nuovo prog
 | Progetto | Cartella |
 |---|---|
 | ECL Receptionist | [ecl-receptionist/](ecl-receptionist/STATO.md) |
+| Codifica chiavi | [codifica-chiavi/](codifica-chiavi/STATO.md) |
 | Ambiente Claude (skill, memoria, regole) | [ambiente-claude/](ambiente-claude/STATO.md) |

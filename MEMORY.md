@@ -1,21 +1,21 @@
 # MEMORY – indice centrale
 
 Punto di partenza per ogni sessione. Qui ci sono solo riassunti e collegamenti: i dettagli stanno nei
-file indicati. Aggiornato: 2026-11-15.
+file indicati. Aggiornato: 2026-11-19.
 
 ## Ultima sessione
 
-- **Data:** 2026-11-15 · **Branch:** `claude/vercel-labs-skills-setup-4v2ify`
-- **Fatto:** installate le skill `find-skills` e `humanizer`; creato il flusso "prima le skill";
-  ricerca di skill per diagnosi auto, ECU, reverse engineering ed elettronica; creato questo sistema di memoria
-  e unito a `main` (PR #2).
-- **Da continuare:** vedi [PROJECTS/ambiente-claude/TODO.md](PROJECTS/ambiente-claude/TODO.md).
+- **Data:** 2026-11-19 · **Branch:** `ccr-5cfd92be-bc1s6a`
+- **Fatto:** aperto il progetto Codifica chiavi: trovati e letti i manuali di OBDSTAR G3, Autel IM608 II
+  e Xhorse Mini Prog; scritta la guida pratica; creato l'ambiente Cloud "Codifica chiavi (manuali)".
+- **Da continuare:** vedi [PROJECTS/codifica-chiavi/TODO.md](PROJECTS/codifica-chiavi/TODO.md).
 
 ## Progetti
 
 | Progetto | Stato | Dove |
 |---|---|---|
 | ECL Receptionist (prototipo receptionist multilingue) | Prototipo funzionante, non ancora unito a `main` | [PROJECTS/ecl-receptionist/](PROJECTS/ecl-receptionist/STATO.md) |
+| Codifica chiavi (programmazione chiavi auto, guida strumenti) | Appena iniziato | [PROJECTS/codifica-chiavi/](PROJECTS/codifica-chiavi/STATO.md) |
 | Ambiente Claude (skill, memoria, regole) | In corso | [PROJECTS/ambiente-claude/](PROJECTS/ambiente-claude/STATO.md) |
 
 ## Branch e Pull Request aperte
@@ -25,6 +25,7 @@ file indicati. Aggiornato: 2026-11-15.
 | `main` | `README.md` + regole, memoria, skill `find-skills` e `humanizer` (PR #2 unita il 2026-11-15) | — |
 | `claude/ecl-receptionist-prototype-xb9bmu` | Prototipo receptionist | Nessuna PR |
 | `claude/founder-skill-installation-80u0uy` | 11 skill Founder in `.claude/skills/` | PR #1 aperta |
+| `ccr-5cfd92be-bc1s6a` | Progetto Codifica chiavi (sessione 2026-11-19) | PR verso `main` |
 | `claude/vercel-labs-skills-setup-4v2ify` | Branch di lavoro per gli aggiornamenti della memoria | PR #2 unita; ripartito da `main` |
 
 La memoria è su `main`. Gli aggiornamenti successivi passano dal branch di lavoro: se una sessione
